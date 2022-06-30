@@ -1,0 +1,583 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+
+struct Item                   //create strcuture for items
+{
+	string Name;
+	string Code;
+	float Price;
+}
+Items[20];                            //struct array for item
+
+struct Bill {
+	string Name;
+	string Code;
+	float Price;
+	int tot;
+	int Qt;
+};                   // structure for bill
+
+void ViewItem();										// Function definition for view items
+void AddItem();										//Function definition for add items
+void Admin();								          // Function definition for selecting admin
+void Cashier(string);						         // Function definition for selecting cashier
+void AdminExit();								// Function definition to Exit Program for Admin Menu
+void CashierExit(string);						// Function definition to Exit program for Cashier Menu
+void PrintBill(string);								// Function definition to Select and Print Bill
+void SalesDetails();									//Function definition to View all Sales Records
+void ItemList();										//Funtion declaration for the items of the store
+
+int main() {
+	string uname;									//Username
+	string pw;									//Password
+
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "" << endl;
+	cout << "--------------------------------------------------------" << "  LOGIN  " << "-------------------------------------------------------" << endl;
+
+	cout << "\tEnter Your Username: ";
+	cin >> uname;									//Reading entered username
+	cout << "\tEnter Your Password: ";
+	cin >> pw;									//Reading entered password
+	cout << "" << endl;
+
+	if ((uname == "Admin" && pw == "1212")) {
+		cout << "Successfully Logged In As Administrator!\n" << endl;      // Login as Administrator
+		cout << "Welcome Administrator" << endl;
+		system("pause");
+		Admin();
+	}
+	else if (uname == "Anne" && pw == "1111") {
+		cout << "Successfully Logged In As Cashier!\n" << endl;             //Login as Cashier
+		cout << "Welcome " << uname + "!" << endl;
+		system("pause");
+		Cashier(uname);
+	}
+	else
+	{
+	                                                 
+		system("cls");                                                    // clear the command screen
+		cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;                         
+		cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+		cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+		cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		cout << "" << endl;
+		cout << "--------------------------------------------------------" << "  LOGIN  " << "-------------------------------------------------------" << endl;
+		cout << "\t\t USER NAME OR PASSWORD IS INCORRECT!! " << endl << " Try Again " << endl;                       	//Program termination  message weill appear
+		cout << "" << endl;
+		cout << "Program will be terminated" << endl;
+	}
+}
+
+
+void Admin() {                                        //Option Number for choosing administartor
+	int op;
+	system("cls");              // clear the command screen
+								
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;                        // Sudu araliya super mart header
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "" << endl;
+	cout << "-----------------------------------------------" << "  ADMINISTRATOR MENU  " << "--------------------------------------------------" << endl;
+	cout << "" << endl;
+	cout << "\t\t1. Add Items" << endl;									//Add new items to db
+	cout << "\t\t2. View Items" << endl;								//View Item in the db
+	cout << "\t\t3. View Sales Details" << endl;						//View Sales Records
+	cout << "\t\t4. Exit" << endl;										//Exit from the program
+	cout << "" << endl;
+
+	cout << "\t\tSelect- ";
+	cin >> op;                                                   //selecting an option from main menu
+	cout << "" << endl;
+	switch (op) {
+
+	case 1:
+		AddItem();														//Calling Add Item function
+		Admin();                                             // going back to Admin menu
+		break;
+	case 2:
+		ViewItem();													// Calling  view item fucntion 
+		system("pause");
+		system("cls");													// clear command
+		Admin();                                                  // going back to Admin menu
+		break;
+
+	case 3:
+		system("cls");
+		SalesDetails();													//Calling View Sales Records  Function
+		system("pause");
+		system("cls");													// clear command
+		Admin();                                              // going back to Admin menu
+	case 4:
+		system("cls");													// clear command
+		AdminExit();
+	default:
+		cout << "Select Between 1-4" << endl;					// Error message display
+		system("pause");
+		Admin();		                                             // going back to Admin menu
+		break;
+	}
+};
+                                                   
+void Cashier(string uname) {                                             //Option number for choosing cashier
+	int op;
+	system("cls");
+
+	                                             
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;                            // Sudu araliya super mart header
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "" << endl;
+	cout << "-------------------------------------------------" << "  CASHIER MENU  " << "----------------------------------------------------" << endl;
+	cout << "" << endl;
+	cout << "\t\t\t\t1. View Items" << endl;								//View Item option
+	cout << "\t\t\t\t2. Print Bill" << endl;						//Select Items & Print Bill
+	cout << "\t\t\t\t3. Exit" << endl;										//Exit from the program
+	cout << "" << endl;
+
+	cout << "\tSelect- ";									 //selecting an option from cashier menu
+	cin >> op;													//Reading entered option
+	cout << "" << endl;
+	switch (op) {
+	case 1:
+		ViewItem();												// Calling  view item fucntion 
+		system("pause");
+		system("cls");												// clear command
+		Cashier(uname);								// going back to menu for cashier
+		break;
+	case 2:
+		PrintBill(uname);										//Calling function to Select Items
+		Cashier(uname);								// going back to menu for cashier
+		break;
+	case 3:
+		system("cls");												// clear CMD.
+		CashierExit(uname);                                  //Exiting cashier menu
+		break;
+	default:												
+		cout << "Select Between 1-3" << endl;						//Displaying error message
+		system("pause");
+		Cashier(uname);								// going back to menu for cashier
+		break;
+	}
+}
+
+//Exit Function for Admin
+void AdminExit()
+{
+	string op; // variable for selection
+	cout << "---------------------------------------------------" << "  EXIT  " << "-------------------------------------------------------" << endl;
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "" << endl;
+	cout << "\t\t\t\t  CONFIRM, DO YOU WANT TO EXIT	" << endl;
+	cout << "\t\t\t\t         [ YES / NO ]  		" << endl;
+	cout << "\t\t\t\t [ ENTER Y FOR YES OR N FOR N ]   " << endl;
+	cin >> op;
+
+	if (op == "y" || op == "Y")  // if selection y program will  exit completely
+	{
+		exit(0);
+	}
+
+	else if (op == "n" || op == "N") // if selection n program will go to admin menu.
+	{
+		system("cls"); // clear commands
+		Admin();
+	}
+
+	else
+	{
+		cout << "\n\t\t\t\t\t   --------   ENTER Y OR N  ONLY   --------   \n" << endl; // prints error message.
+		AdminExit();
+
+	}
+}
+// Exit Function for Cashier
+void CashierExit(string username)
+{
+	string op; // variable to get user input.
+	cout << "---------------------------------------------------" << "  EXIT  " << "-------------------------------------------------------------" << endl;
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "" << endl;
+	cout << "\t\t\t\t  CONFIRM, DO YOU WANT TO EXIT	" << endl;
+	cout << "\t\t\t\t         [ YES / NO ]  		" << endl;
+	cout << "\t\t\t\t [ ENTER Y FOR YES / N FOR NO   ]" << endl;
+	cin >> op;
+	if (op == "y" ||  op == "Y")                   // if selection = y program will  exit completely
+	{
+		exit(0);                  // exit completely.
+	}
+
+	else if (op == "n" || op == "N")              // if selection = n program will go to cashier menu.
+	{
+		system("cls");              // clear command screen
+		Cashier(username);                   //call cashier menu function
+	}
+
+	else
+	{
+		cout << "\n\t\t\t\t\t   --------   ENTER Y OR N  ONLY   --------   \n" << endl; // prints error message.
+		CashierExit(username);
+	}
+}
+
+
+void AddItem() {                                                   //Function to Add Items
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;                    
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;                // Sudu araliya super mart header
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "" << endl;
+	cout << "-------------------------------------------------" << "  ADD ITEMS  " << "----------------------------------------------------" << endl;
+	cout << "" << endl;
+	int C1 = 0;                          // declare variable for additem function
+	Item Arr[5];                        //Array to store 5 new items for once
+	ifstream mart("C:\\Users\\Sandusha\\Desktop\\Assignments\\FCP\\Super Market Project\\Supermarket Items.txt"); // reading file
+	if (mart.is_open())
+	{
+		{
+			system("cls");
+			cout << "" << endl;
+			cout << "You can only add 5 items at once!! " << endl;                       //Display the message of maximum items can add at once
+			system("pause");
+
+		}
+		while (C1 > 5);
+		for (int C1 = 0; C1 < 5; C1++)           //for loop for get new items for 5 times into array
+		{					
+			cout << "Product Name : ";
+			cin >> Arr[C1].Name;
+			cout << "Product Code : ";
+			cin >> Arr[C1].Code;
+			cout << "Price : ";
+			cin >> Arr[C1].Price;
+			cout << "" << endl;
+		}
+		cout << "" << endl;
+		for (int C1 = 0; C1 < 5; C1++) //for loop enter the data into the text file
+		{			
+		fstream mart("C:\\Users\\Sandusha\\Desktop\\Assignments\\FCP\\Super Market Project\\Supermarket Items.txt", ios::app);
+		mart << Arr[C1].Code << "\t\t" << Arr[C1].Name << "\t\t\t\t\t\t" << "Rs " << Arr[C1].Price << endl;
+		mart.close();
+		}
+		cout << "Added 5 Items Successfully" << endl;		// item added messege
+		system("pause");
+		system("cls");
+	}
+
+	else {
+		cout << "File is not found or created.Contact maintainance" << endl;		//Error Message
+		system("pause");
+	}
+}
+
+void ItemList() {   // added item list in the application
+
+	Items[0].Code = "T0001";
+	Items[0].Name = "Watawala Tea 400g";
+	Items[0].Price = 365.00;
+
+	Items[1].Code = "T0002";
+	Items[1].Name = "7 Up Mega 1.5l ";
+	Items[1].Price = 160.00;
+
+	Items[2].Code = "T0003";
+	Items[2].Name = "Astra Fat Spread 500G Tub ";
+	Items[2].Price = 450.00;
+
+	Items[3].Code = "T0004";
+	Items[3].Name = "Baby Cheramy Cologne 100ml  ";
+	Items[3].Price = 200.00;
+
+	Items[4].Code = "T0005";
+	Items[4].Name = "Dettol Soap ";
+	Items[4].Price = 60.00;
+
+	Items[5].Code = "T0006";
+	Items[5].Name = "Dimo Lumin LED Day Pin";
+	Items[5].Price = 500.25;
+
+	Items[6].Code = "T0008";
+	Items[6].Name = "Highland Uhc F/C Milk 900ml Packet ";
+	Items[6].Price = 180.00;
+
+	Items[7].Code = "T0009";
+	Items[7].Name = "Rice Red Kekulu 5kg Packet";
+	Items[7].Price = 450.00;
+
+	Items[8].Code = "T0010";
+	Items[8].Name = "Catch Mackerel 425g";
+	Items[8].Price = 220.50;
+
+	Items[9].Code = "T0011";
+	Items[9].Name = "Anchor Milk Powder 400g";
+	Items[9].Price = 380.00;
+
+	Items[10].Code = "T0012";
+	Items[10].Name = "Brown Sugar 2Kg Packet";
+	Items[10].Price = 280.00;
+
+	Items[11].Code = "T0013";
+	Items[11].Name = "Lifebuoy H/Wash Kitchen Fresh 200ml";
+	Items[11].Price = 192.00;
+
+	Items[12].Code = "T0014";
+	Items[12].Name = "Maggi Coconut Milk Powder 300g";
+	Items[12].Price = 382.00;
+
+	Items[13].Code = "T0015";
+	Items[13].Name = "Harischandra Papadam 70g";
+	Items[13].Price = 100.00;
+
+	Items[14].Code = "T0016";
+	Items[14].Name = "Sustagen Vanila 400g";
+	Items[14].Price = 1805.00;
+
+	Items[15].Code = "T0017";
+	Items[15].Name = "Cocacola Light Can 320ml ";
+	Items[15].Price = 238.00;
+
+	Items[16].Code = "T0018";
+	Items[16].Name = "EH Chicken Sausges 300g";
+	Items[16].Price = 382.00;
+
+	Items[17].Code = "T0019";
+	Items[17].Name = "Dreamron Silicone Hair Treatment 100ml";
+	Items[17].Price = 500.00;
+
+	Items[18].Code = "T0020";
+	Items[18].Name = "EH Chocolate Ice Cream 1L";
+	Items[18].Price = 255.00;
+
+	Items[19].Code = "T0007";
+	Items[19].Name = "Nescafe Gold 100g";
+	Items[19].Price = 1645.00;
+
+}
+
+void ViewItem() {                                   //Function to View Items
+	system("cls");                             //clear command
+	cout << "-------------------------------------------------" << "  VIEW ITEMS  " << "----------------------------------------------------" << endl;
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;             // Sudu araliya super mart header
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "" << endl;
+	std::string line_;                             //reading file, in by line lines order
+	cout << "" << endl;
+	cout << "" << endl;
+	ifstream mart("C:\\Users\\Sandusha\\Desktop\\Assignments\\FCP\\Super Market Project\\Supermarket Items.txt");     //Viewing item list from the file
+	if (mart.is_open()) {
+		while (getline(mart, line_)) {
+			std::cout << line_ << '\n';
+		}
+
+		mart.close();
+	}
+	else
+		std::cout << "File is not found or created.Contact maintainance" << '\n';    //Error message 
+	std::cin.get();
+
+}
+
+
+void SalesDetails() {                                       // Function for view sales details
+	cout << "" << endl;
+	cout << "-----------------------------------------------" << "  SALES DETAILS  " << "---------------------------------------------------" << endl;
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "" << endl;
+	system("pause");
+	cout << "" << endl;
+	std::string line_;                              	//reading file,line order
+	ifstream mart("C:\\Users\\Sandusha\\Desktop\\Assignments\\FCP\\Super Market Project\\Reciepts.txt");
+	if (mart.is_open()) {
+		while (getline(mart, line_)) {
+			std::cout << line_ << '\n';
+		}
+		mart.close();
+	}
+	else
+
+		std::cout << "File is not found or created.Contact maintainance" << '\n';
+	std::cin.get();                            // Error Message
+}           
+void PrintBill(string uname) {                           //Function for add items
+	system("cls");
+	Bill Arr[20];						//Array to store selected Items
+	int C2 = 0, it, tot, amt, qt, stot = 0, bal = 0;   // varialbe declaration for print bill
+	string select, itcode;
+	ItemList();
+	cout << "-------------------------------------------------" << "  BILL ITEMS  " << "----------------------------------------------------" << endl;
+	do {
+		cout << "(20 Items can be added at once)" << endl;          //messege of mazximum items can add at once
+		cout << "Item quantity - ";                                 //billing items quantity
+		cin >> it;
+		if (it > 20) {
+			cout << "\t\t\t-----------Please enter less than 20-----------\n" << endl;       //Error message for exceeding the maximum bill items
+		}
+	} while (it > 20);
+	cout << "" << endl;
+	while (C2 < it) {
+		cout << "Enter Code:";
+		cin >> itcode;
+		cout << "" << endl;
+		for (int c = 0; c < 20; c++) {
+			if (itcode == Items[c].Code) {
+				cout << "Item Name : " << Items[c].Name << endl;
+				cout << "Item Price :" << Items[c].Price << endl;
+				Arr[c].Code = Items[c].Code;								//save selected item code 
+				Arr[c].Name = Items[c].Name;						//save selected item name
+				Arr[c].Price = Items[c].Price;							//save selected item price
+				cout << "" << endl;
+				cout << "Enter quantity - ";						//geting quantity of the item
+				cin >> qt;
+				cout << "--------------------------" << endl;
+				tot = qt*Items[c].Price;						//total sum=quantity of selected item × price of the item
+				stot = stot + tot;								//every bought item subtotal= Total of  every "total Sum"
+				Arr[c].Qt = qt;									//save quantity of the selected item
+				Arr[c].tot = tot;								//save of sum of the selected item
+			}
+
+		}
+		C2++;                                        //increase counter variable from 1 value
+	}
+	cout << "Your Payment - Rs " << stot << endl;						//Display Subtotal
+	cout << "Paid Amount - ";
+	cin >> amt;												//Enter the customer given amount
+	bal = amt - stot;										//Balance=s Amount-subtotal
+	cout << "Balance : " << bal << endl;					//Display the balance
+	system("pause");
+	//Displaying the bill
+	system("cls");
+	cout << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	cout << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	cout << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	cout << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	cout << "" << endl;
+	cout << "Cashier - " << uname << endl;
+	cout << "" << endl;
+	cout << " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	for (int c = 0; c < 20; c++) {       // For loop for get the selected item into the bill
+		if (Arr[c].Qt >= 1) {
+			cout << Arr[c].Name << endl;
+			cout << setw(15) << Arr[c].Code << setw(18) << "(" << Arr[c].Price << "x" << Arr[c].Qt << ")" << setw(40) << "Rs " << Arr[c].tot << endl; //getting selected items
+		}
+	}
+	cout << "---------------------------------------------------------------------------------" << endl;
+	cout << "SUB TOTAL" << setw(66) << "Rs " << stot << endl;
+	cout << "---------------------------------------------------------------------------------" << endl;
+	cout << "Amount " << setw(68) << "Rs " << amt << endl;
+	cout << "Balance" << setw(68) << "Rs " << bal << endl;
+	cout << "---------------------------------------------------------------------------------" << endl;
+	cout << "\t\t\t--------------------THANK YOU COME AGAIN--------------------" << endl;
+	cout << "" << endl;
+	cout << "Please note that food items, Pharmaceuticals and Sterile Medical devices" << endl;
+	cout << " will not be accepted as return or exchange." << endl;;
+	cout << "" << endl;
+	cout << "" << endl;
+	cout << " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	cout << " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+
+	//Printingthe Bill to the text file
+	ofstream Reciept("C:\\Users\\Sandusha\\Desktop\\Assignments\\FCP\\Super Market Project\\Reciepts.txt", ios::app);
+	Reciept << "\n\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	Reciept << "\t\t\t\t|          SUDU ARALIYA PVT/LTD	Super Mart           	|" << endl;
+	Reciept << "\t\t\t\t|  No 101 Colombo - Hanwella Low Level Rd, Kaduwela	|" << endl;
+	Reciept << "\t\t\t\t|          TEL # 0112 500000 / 0114 000000		|" << endl;
+	Reciept << "\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" << endl;
+	Reciept << "Cashier : " << uname << endl;
+	Reciept << "" << endl;
+	Reciept << " _ _   _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	for (int c = 0; c < 20; c++) {            // for loop for enter the bill into the text file 
+		if (Arr[c].Qt >= 1) {
+			Reciept << Arr[c].Name << endl;
+			Reciept << setw(15) << Arr[c].Code << setw(18) << "(" << Arr[c].Price << "x" << Arr[c].Qt << ")" << setw(40) << "Rs " << Arr[c].tot << endl;
+		}
+	}
+	Reciept << " _ _   _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	Reciept << "SUB TOTAL" << setw(68) << "Rs " << stot << endl;
+	Reciept << " _ _   _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	Reciept << "Amount " << setw(68) << "Rs " << amt << endl;
+	Reciept << "Balance" << setw(68) << "RS " << bal << endl;
+	Reciept << " _ _   _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	Reciept << "\t\t\t------------------------------THANK YOU COME AGAIN-------------------------------" << endl;
+	Reciept << "" << endl;
+	Reciept << "Please note that food items, Pharmaceuticals and Sterile Medical devices" << endl;
+	Reciept << " will not be accepted as return or exchange." << endl;;
+	Reciept << "" << endl;
+	Reciept << " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" << endl;
+	Reciept.close();
+	cout << "" << endl;
+	cout << "Saved sale details successfully" << endl;
+	system("pause");
+	//select to print a new bill or cancel
+	cout << "Do you want to print another bill? (y/n): ";  //asking cashier to selct a new bill or not
+	cin >> select;
+	if (select == "y") {
+		system("cls");
+		PrintBill(uname);									//function calling for print bill again
+	}
+	else if (select == "n") {
+		system("cls");
+		Cashier(uname);							//function calling for cashier menu 
+	}
+	else {
+		cout << "\n\t\t\t\t\t   --------   Enter y or n  only   --------   \n" << endl; // prints error message.
+	}
+	while (select != "y" || select != "n");
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
